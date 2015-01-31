@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/disk/Plagiarism/log.out</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+		<smtpHost>relay.appriver.com</smtpHost>
+		<smtpPort>2525</smtpPort>
+		<to>prashantk@exzeo.com</to>
+		<from>test@exzeo.com</from>
+		<subject>TESTING: %logger{20} - %m</subject>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</layout>
+	</appender>
+	<appender name="SMTP" class="ch.qos.logback.access.net.SMTPAppender">
+		<layout class="ch.qos.logback.access.html.HTMLLayout">
+			<pattern>%h%l%u%t%r%s%b</pattern>
+		</layout>
+
+		<!-- <Evaluator class="ch.qos.logback.access.net.URLEvaluator"> <URL>url1.jsp</URL> 
+			<URL>directory/url2.html</URL> </Evaluator> -->
+		<from>test@exzeo.com</from>
+		<smtpHost>relay.appriver.com</smtpHost>
+		<to>prashantk@exzeo.com</to>
+	</appender>
+
+	<appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+		<connectionSource
+			class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+			<driverClass>com.mysql.jdbc.Driver</driverClass>
+			<url>jdbc:mysql://localhost:3306/logger</url>
+			<user>devuser</user>
+			<password>devuser</password>
+		</connectionSource>
+	</appender>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
+			by default -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<root level="debug">
+		<!-- <appender-ref ref="FILE" /> -->
+		<!-- <appender-ref ref="STDOUT" /> -->
+		<!-- <appender-ref ref="EMAIL" /> -->
+		<appender-ref ref="DB" />
+		<!-- <appender-ref ref="SMTP" /> -->
+	</root>
+</configuration>
